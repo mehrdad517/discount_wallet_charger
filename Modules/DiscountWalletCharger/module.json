@@ -1,0 +1,13 @@
+{
+    "name": "DiscountWalletCharger",
+    "alias": "DiscountWalletCharger",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\DiscountWalletCharger\\Providers\\DiscountWalletChargerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
