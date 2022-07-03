@@ -9,7 +9,16 @@ class Finance extends Model
 {
     use HasFactory;
 
-    protected $table = 'fiance';
+
+    protected $primaryKey = 'id';
+
+    protected $keyType = 'string';
+
+    protected $table = 'finance';
+
+    protected $guarded = [];
+
+    public $timestamps = false;
 
 
 }

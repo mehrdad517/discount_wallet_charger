@@ -18,8 +18,7 @@ class DiscountFactory extends Factory
     public function definition()
     {
         return [
-            'id' => $this->faker->randomNumber(),
-            'discount_code' => $this->faker->text(10),
+            'discount_code' => $this->faker->unique()->text(10),
             'total_count' => 1000,
             'usage_count' => 0,
             'type' => Discount::DISCOUNT_FINANCE_CHARGER
