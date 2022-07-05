@@ -33,7 +33,7 @@ Route::prefix('admin')->middleware('auth:api')->group(function () {
 
 });
 
-Route::prefix('DiscountWalletCharger')->group(function () {
+Route::prefix('discountWalletCharger')->group(function () {
 
     Route::post('/', [
         DiscountWalletChargerController::class,

@@ -16,7 +16,7 @@ class DiscountWalletChargerRequest extends FormRequest
     public function rules()
     {
         return [
-            'mobile' => 'required|min:11|max:11|unique:users',
+            'mobile' => 'required|min:11|max:11',
             'discount_code' => 'required'
         ];
     }

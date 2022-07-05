@@ -1,20 +1,22 @@
 <?php
 
+$url = 'http://localhost:8000/api/discountWalletCharger';
+
 $file = fopen('output.txt', 'a');
 
-$conn = mysqli_connect('localhost', 'root', '', 'arvan');
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, [
+    'mobile' => $argv[1],
+    'discount_code' => 'worldcup'
+]);
 
-// Check connection
-if (!$conn) {
-    fwrite($file, "Connection failed: " . mysqli_connect_error());
-}
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-$sql = "CALL discount_handle_user_finance('$argv[1]', '$argv[2]')";
-$result = $conn->query($sql);
+$result = curl_exec($ch);
 
-while($row = $result->fetch_array()) {
-    fwrite($file, time() . " result for $argv[1]:" . json_encode($row) . PHP_EOL);
-}
+
+fwrite($file, $result);
 
 
 fclose($file);
