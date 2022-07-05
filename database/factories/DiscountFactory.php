@@ -18,10 +18,11 @@ class DiscountFactory extends Factory
     public function definition()
     {
         return [
-            'discount_code' => $this->faker->unique()->text(10),
+            'discount_code' => 'worldcup',
             'total_count' => 1000,
             'usage_count' => 0,
-            'type' => Discount::DISCOUNT_FINANCE_CHARGER
+            'type' => Discount::DISCOUNT_FINANCE_CHARGER,
+            'discount_value' => '5000000'
         ];
     }
 }

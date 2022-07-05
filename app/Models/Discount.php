@@ -19,6 +19,11 @@ class Discount extends Model
 
     const DISCOUNT_FINANCE_CHARGER = 'by_finance';
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'discount_usage', 'discount_code', 'user_id');
+    }
+
 
 
 }

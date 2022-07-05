@@ -25,7 +25,7 @@ class DiscountWalletCharger extends TestCase
 
         DiscountFacade::shouldReceive('discountTypeHasFinanceCharger')->never();
         DiscountFacade::shouldReceive('discountIsFull')->never();
-        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        UserFacade::shouldReceive('userFindOrCreateBy')->never();
         DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
         DiscountFacade::shouldReceive('store')->never();
 
@@ -63,7 +63,7 @@ class DiscountWalletCharger extends TestCase
 
         DiscountFacade::shouldReceive('discountHasExpired')->never();
 
-        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        UserFacade::shouldReceive('userFindOrCreateBy')->never();
         DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
         DiscountFacade::shouldReceive('store')->never();
 
@@ -100,7 +100,7 @@ class DiscountWalletCharger extends TestCase
 
 
         DiscountFacade::shouldReceive('discountIsFull')->never();
-        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        UserFacade::shouldReceive('userFindOrCreateBy')->never();
         DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
         DiscountFacade::shouldReceive('store')->never();
 
@@ -143,7 +143,7 @@ class DiscountWalletCharger extends TestCase
             ->once()
             ->andReturn(false);
 
-        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        UserFacade::shouldReceive('userFindOrCreateBy')->never();
         DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
         DiscountFacade::shouldReceive('store')->never();
 
@@ -164,7 +164,7 @@ class DiscountWalletCharger extends TestCase
         $discount = Discount::factory()->make();
         $user = User::factory()->make();
 
-        DiscountFacade::shouldReceive('userFindOrCreateBy')
+        UserFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable(null));
@@ -216,7 +216,7 @@ class DiscountWalletCharger extends TestCase
             ->andReturn(true);
 
 
-        DiscountFacade::shouldReceive('userFindOrCreateBy')
+        UserFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable($user));
@@ -280,7 +280,7 @@ class DiscountWalletCharger extends TestCase
             ->once()
             ->andReturn(false);
 
-        DiscountFacade::shouldReceive('userFindOrCreateBy')
+        UserFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable($user));
@@ -311,7 +311,7 @@ class DiscountWalletCharger extends TestCase
         $discount = Discount::factory()->make();
         $user = User::factory()->make();
 
-        DiscountFacade::shouldReceive('userFindOrCreateBy')
+        UserFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable($user));

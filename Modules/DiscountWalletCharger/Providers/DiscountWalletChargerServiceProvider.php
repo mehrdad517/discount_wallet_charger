@@ -38,7 +38,6 @@ class DiscountWalletChargerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->register(RouteServiceProvider::class);
 
         $this->app->bind('DiscountFacade', function () {
             return new DiscountFacadeRunner();

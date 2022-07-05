@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('password_resets', function (Blueprint $table) {
-            $table->string('email')->index();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        DB::unprepared("CREATE DEFINER=`root`@`localhost` TRIGGER `discounts_before_update` BEFORE UPDATE ON `discounts` FOR EACH ROW BEGIN
+	IF NEW.usage_count >= NEW.total_count AND NEW.`status` = 1
+	THEN
+		SET NEW.`status` = 0; -- expire status
+	END IF;
+END");
+
     }
 
     /**
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        Schema::dropIfExists('discounts_triggers');
     }
 };
