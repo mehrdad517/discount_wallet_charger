@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 use Modules\DiscountWalletCharger\Http\Controllers\DiscountWalletChargerController;
-use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,14 +19,10 @@ Route::prefix('admin')->middleware('auth:api')->group(function () {
 
     Route::prefix('discounts')->group(function () {
 
-        Route::get('/usage/{discount}', function ($discount) {
-            $response = DB::table('discount_usage as d')
-                ->leftJoin('users as u', 'u.id', '=', 'd.user_id')
-                ->where('discount_id', $discount)
-                ->get();
-
-            return response()->json(['status' => true, 'entities' => $response]);
-        });
+        Route::get('/usage/{discount}', [
+            DiscountWalletChargerController::class,
+            'discountUsageList'
+        ])->name('discount_usage_list');
 
     });
 
@@ -38,6 +33,6 @@ Route::prefix('discountWalletCharger')->group(function () {
     Route::post('/', [
         DiscountWalletChargerController::class,
         'DiscountWalletCharger'
-    ])->name('discount_code_wallet_charger');
+    ])->name('discount_wallet_charger');
 
 });

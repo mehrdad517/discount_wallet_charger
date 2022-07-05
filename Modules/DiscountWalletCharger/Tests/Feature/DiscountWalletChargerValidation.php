@@ -20,7 +20,7 @@ class DiscountWalletChargerValidation extends TestCase
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertSessionHasErrors($error);
 
     }
@@ -45,7 +45,7 @@ class DiscountWalletChargerValidation extends TestCase
 
         $this
             ->post(
-                route('discount_code_wallet_charger'), $data
+                route('discount_wallet_charger'), $data
             )->assertSessionHasErrors($error);
     }
 
@@ -69,7 +69,7 @@ class DiscountWalletChargerValidation extends TestCase
 
         $this
             ->post(
-                route('discount_code_wallet_charger'), $data
+                route('discount_wallet_charger'), $data
             )->assertSessionHasErrors($error);
     }
 
@@ -96,7 +96,7 @@ class DiscountWalletChargerValidation extends TestCase
 
         $this
             ->post(
-                route('discount_code_wallet_charger'), $data
+                route('discount_wallet_charger'), $data
             )->assertSessionHasErrors($error);
     }
 }

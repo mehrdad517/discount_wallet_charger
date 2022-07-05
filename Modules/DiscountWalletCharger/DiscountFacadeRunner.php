@@ -5,19 +5,30 @@ namespace Modules\DiscountWalletCharger;
 use App\Models\Finance;
 use App\Models\User;
 use App\Models\Discount;
+use App\Repositories\DiscountRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\Pure;
 
-class DiscountWalletCharger
+class DiscountFacadeRunner
 {
+
+
+    private $discountRepository;
+
+    public function __construct()
+    {
+        $this->discountRepository = new DiscountRepository();
+    }
 
     /**
      * @param $discount_id
      * @param $user_id
      * @return int
      */
-    public function checkBeforeDiscountUsage($discount_id, $user_id)
+    public function alreadyUse($discount_id, $user_id)
     {
-        return Discount::discountUsageByUser($discount_id, $user_id);
+        return $this->discountRepository->alreadyUse($discount_id, $user_id);
     }
 
     /**
@@ -26,7 +37,7 @@ class DiscountWalletCharger
      */
     public function findDiscountBycode($discount_code)
     {
-        $discount = Discount::findDiscountByCode($discount_code);
+        $discount = $this->discountRepository->findBy('discount_code', $discount_code);
 
         return nullable($discount);
     }
@@ -37,7 +48,7 @@ class DiscountWalletCharger
      */
     public function discountTypeIsFinanceCharger($id)
     {
-        return Discount::discountTypeIsFinanceCharger($id);
+        return $this->discountRepository->discountType($id) === Discount::DISCOUNT_FINANCE_CHARGER;
     }
 
     /**
@@ -46,7 +57,7 @@ class DiscountWalletCharger
      */
     public function discountHasExpired($id)
     {
-        return Discount::discountHasExpired($id);
+        return $this->discountRepository->hasExpired($id);
     }
 
 
@@ -56,45 +67,9 @@ class DiscountWalletCharger
      */
     public function discountIsFull($id)
     {
-        return Discount::discountIsFull($id);
+        return $this->discountRepository->ifFull($id);
     }
 
-    /**
-     * @param $mobile
-     * @return \Imanghafoori\Helpers\Nullable
-     */
-    public function userFirstOrCreateWithMobile($mobile)
-    {
-
-        $user = User::firstOrCreateWithMobile($mobile);
-
-        return nullable($user);
-    }
-
-
-    /**
-     * @param $user_id
-     * @param $discount_id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function storeWithProcedure($user_id, $discount_id)
-    {
-
-        try {
-            $result = DB::select('call discount_handle_user_finance(?, ?)', [
-                $user_id, // no difference between id and mobile, If the user exists, the user will not be created
-                $discount_id // no difference between id and code
-            ]);
-
-            if (!isset($result)) {
-                return response()->json(['status' => true]);
-            }
-
-            return response()->json(['status' => false, 'message' => $result['err']]);
-        } catch (\Exception $exception) {
-            return response()->json(['status' => false, 'message' => $exception->getMessage()]);
-        }
-    }
 
 
     /**

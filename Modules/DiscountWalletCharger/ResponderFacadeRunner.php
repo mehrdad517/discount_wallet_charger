@@ -2,7 +2,7 @@
 
 namespace Modules\DiscountWalletCharger;
 
-class DiscountWalletChargerResponder
+class ResponderFacadeRunner
 {
 
     public function discountTypeInvalid()
@@ -58,6 +58,11 @@ class DiscountWalletChargerResponder
     public function discountAleadyUsed()
     {
         return response(['status' => false, 'message' => 'It has already been used']);
+    }
+
+    public function discountUsageError()
+    {
+        return response(['status' => false, 'message' => 'An error occurred']);
     }
 
 

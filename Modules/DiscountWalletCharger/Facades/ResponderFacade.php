@@ -4,7 +4,7 @@ namespace Modules\DiscountWalletCharger\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class DiscountWalletChargerResponderFacade extends Facade
+class ResponderFacade extends Facade
 {
 
     /**
@@ -12,7 +12,7 @@ class DiscountWalletChargerResponderFacade extends Facade
      */
     public static function getFacadeAccessor() : string
     {
-        return 'DiscountWalletChargerResponderFacade';
+        return 'ResponderFacade';
     }
 
 }

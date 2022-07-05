@@ -2,14 +2,11 @@
 
 namespace Modules\DiscountWalletCharger\Http\Controllers;
 
-use App\Models\Discount;
-use App\Models\Finance;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
-use Modules\DiscountWalletCharger\Facades\DiscountWalletChargerFacade;
-use Modules\DiscountWalletCharger\Facades\DiscountWalletChargerResponderFacade;
+use Modules\DiscountWalletCharger\Facades\DiscountFacade;
+use Modules\DiscountWalletCharger\Facades\ResponderFacade;
+use Modules\DiscountWalletCharger\Facades\UserFacade;
 use Modules\DiscountWalletCharger\Http\Requests\DiscountWalletChargerRequest;
 
 class DiscountWalletChargerController extends Controller
@@ -20,45 +17,53 @@ class DiscountWalletChargerController extends Controller
      */
     public function DiscountWalletCharger(DiscountWalletChargerRequest $request)
     {
-        $discount = DiscountWalletChargerFacade::findDiscountBycode($request->get('discount_code'))->getOrSend(function () {
-           return DiscountWalletChargerResponderFacade::discountNotFound();
+        $discount = DiscountFacade::findDiscountBycode($request->get('discount_code'))->getOrSend(function () {
+           return ResponderFacade::discountNotFound();
         });
 
 
-        if( ! DiscountWalletChargerFacade::discountTypeIsFinanceCharger($discount->id) ) {
-            return DiscountWalletChargerResponderFacade::discountTypeInvalid();
+        if( ! DiscountFacade::discountTypeIsFinanceCharger($discount->id) ) {
+            return ResponderFacade::discountTypeInvalid();
         };
 
-        if(DiscountWalletChargerFacade::discountHasExpired($discount->id)) {
-            return DiscountWalletChargerResponderFacade::discountHasExpired();
-        };
-
-
-        if(DiscountWalletChargerFacade::discountIsFull($discount->id)) {
-            return DiscountWalletChargerResponderFacade::discountIsFull();
+        if(DiscountFacade::discountHasExpired($discount->id)) {
+            return ResponderFacade::discountHasExpired();
         };
 
 
-        $user = DiscountWalletChargerFacade::userFirstOrCreateWithMobile($request->get('mobile'))->getOrSend(function () {
-            return DiscountWalletChargerResponderFacade::UserFirstOrCreateFaild();
+        if(DiscountFacade::discountIsFull($discount->id)) {
+            return ResponderFacade::discountIsFull();
+        };
+
+
+        $user = UserFacade::userFindOrCreateBy($request->get('mobile'))->getOrSend(function () {
+            return ResponderFacade::UserFirstOrCreateFaild();
         });
 
 
-
-
-        if ( DiscountWalletChargerFacade::checkBeforeDiscountUsage($discount->id, $user->id) ) {
-            return DiscountWalletChargerResponderFacade::discountAleadyUsed();
+        if ( DiscountFacade::alreadyUse($discount->id, $user->id) ) {
+            return ResponderFacade::discountAleadyUsed();
         }
 
-        $response = DiscountWalletChargerFacade::store($discount->id, $user->id); // storeWithProcedure
+        $response = DiscountFacade::store($discount->id, $user->id); // storeWithProcedure
 
         if ($response['status']) {
-            return DiscountWalletChargerResponderFacade::discountStoreSuccessful();
+            return ResponderFacade::discountStoreSuccessful();
         }
 
 
-        return DiscountWalletChargerResponderFacade::exceptionError($response['message']);
-
+        return ResponderFacade::exceptionError($response['message']);
 
     }
+
+
+    public function discountUsageList($discount_id)
+    {
+        $response = DiscountFacade::usageList($discount_id)->getOrSend(function () {
+            return ResponderFacade::discountUsageError();
+        });
+
+        return response()->json(['status' => true, 'entities' => $response]);
+    }
+
 }

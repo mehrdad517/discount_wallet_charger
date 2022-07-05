@@ -5,7 +5,7 @@ namespace Modules\DiscountWalletCharger\Tests\Unit;
 use App\Models\Discount;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use Modules\DiscountWalletCharger\Facades\DiscountWalletChargerFacade;
+use Modules\DiscountWalletCharger\Facades\DiscountFacade;
 use Tests\TestCase;
 
 class DiscountWalletCharger extends TestCase
@@ -18,21 +18,21 @@ class DiscountWalletCharger extends TestCase
 
         $this->mockDiscountWalletChargerValidator();
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->once()
             ->with('worldcup')
             ->andReturn(nullable(null));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeHasFinanceCharger')->never();
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')->never();
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')->never();
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')->never();
-        DiscountWalletChargerFacade::shouldReceive('store')->never();
+        DiscountFacade::shouldReceive('discountTypeHasFinanceCharger')->never();
+        DiscountFacade::shouldReceive('discountIsFull')->never();
+        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('store')->never();
 
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'The discount code entered is invalid'
@@ -47,30 +47,30 @@ class DiscountWalletCharger extends TestCase
 
         $this->mockDiscountWalletChargerValidator();
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')->never();
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')->never();
 
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')->never();
+        DiscountFacade::shouldReceive('discountHasExpired')->never();
 
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')->never();
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')->never();
-        DiscountWalletChargerFacade::shouldReceive('store')->never();
+        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('store')->never();
 
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'This discount code is not defined for charging wallets'
@@ -83,31 +83,31 @@ class DiscountWalletCharger extends TestCase
 
         $this->mockDiscountWalletChargerValidator();
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')
+        DiscountFacade::shouldReceive('discountHasExpired')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
 
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')->never();
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')->never();
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')->never();
-        DiscountWalletChargerFacade::shouldReceive('store')->never();
+        DiscountFacade::shouldReceive('discountIsFull')->never();
+        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('store')->never();
 
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'The discount code has expired'
@@ -121,36 +121,36 @@ class DiscountWalletCharger extends TestCase
 
         $this->mockDiscountWalletChargerValidator();
 
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')
+        DiscountFacade::shouldReceive('discountIsFull')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')
+        DiscountFacade::shouldReceive('discountHasExpired')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')->never();
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')->never();
-        DiscountWalletChargerFacade::shouldReceive('store')->never();
+        DiscountFacade::shouldReceive('userFindOrCreateBy')->never();
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('store')->never();
 
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'The capacity of the discount code has been completed'
@@ -164,37 +164,37 @@ class DiscountWalletCharger extends TestCase
         $discount = Discount::factory()->make();
         $user = User::factory()->make();
 
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')
+        DiscountFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable(null));
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')
+        DiscountFacade::shouldReceive('discountHasExpired')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')
+        DiscountFacade::shouldReceive('discountIsFull')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')->never();
-        DiscountWalletChargerFacade::shouldReceive('store')->never();
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('store')->never();
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'An error occurred in receiving and creating user information'
@@ -210,42 +210,42 @@ class DiscountWalletCharger extends TestCase
         $user = User::factory()->make();
 
 
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')
             ->once()
             ->with($discount->id, $user->id)
             ->andReturn(true);
 
 
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')
+        DiscountFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable($user));
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')
+        DiscountFacade::shouldReceive('discountHasExpired')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')
+        DiscountFacade::shouldReceive('discountIsFull')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('store')->never();
+        DiscountFacade::shouldReceive('store')->never();
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'It has already been used'
@@ -260,44 +260,44 @@ class DiscountWalletCharger extends TestCase
         $discount = Discount::factory()->make();
         $user = User::factory()->make();
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')
+        DiscountFacade::shouldReceive('discountHasExpired')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')
+        DiscountFacade::shouldReceive('discountIsFull')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')
+        DiscountFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable($user));
 
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')
             ->once()
             ->with($discount->id, $user->id)
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('store')
+        DiscountFacade::shouldReceive('store')
             ->with($discount->id, $user->id)
             ->once()
             ->andReturn(['status' => true]);
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => true,
                 'message' => 'The operation was successful'
@@ -311,44 +311,44 @@ class DiscountWalletCharger extends TestCase
         $discount = Discount::factory()->make();
         $user = User::factory()->make();
 
-        DiscountWalletChargerFacade::shouldReceive('userFirstOrCreateWithMobile')
+        DiscountFacade::shouldReceive('userFindOrCreateBy')
             ->once()
             ->with($user->mobile)
             ->andReturn(nullable($user));
 
-        DiscountWalletChargerFacade::shouldReceive('findDiscountBycode')
+        DiscountFacade::shouldReceive('findDiscountBycode')
             ->with($discount->discount_code)
             ->once()
             ->andReturn(nullable($discount));
 
-        DiscountWalletChargerFacade::shouldReceive('discountTypeIsFinanceCharger')
+        DiscountFacade::shouldReceive('discountTypeIsFinanceCharger')
             ->with($discount->id)
             ->once()
             ->andReturn(true);
 
-        DiscountWalletChargerFacade::shouldReceive('discountHasExpired')
+        DiscountFacade::shouldReceive('discountHasExpired')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('discountIsFull')
+        DiscountFacade::shouldReceive('discountIsFull')
             ->with($discount->id)
             ->once()
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('checkBeforeDiscountUsage')
+        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')
             ->once()
             ->with($discount->id, $user->id)
             ->andReturn(false);
 
-        DiscountWalletChargerFacade::shouldReceive('store')
+        DiscountFacade::shouldReceive('store')
             ->with($discount->id, $user->id)
             ->once()
             ->andReturn(['status' => false, 'message' => 'other exception']);
 
 
         $this
-            ->post(route('discount_code_wallet_charger'), [])
+            ->post(route('discount_wallet_charger'), [])
             ->assertJson([
                 'status' => false,
                 'message' => 'other exception'

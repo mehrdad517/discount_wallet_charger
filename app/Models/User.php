@@ -41,20 +41,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    public static function firstOrCreateWithMobile($mobile)
-    {
-
-        $user = User::query()->where('mobile', $mobile)->first();
-
-        if ( !$user ) {
-            // you must have a one method for creating user in the application, But we are satisfied with this
-            $user = User::create([
-                'mobile' => $mobile,
-                'created_at' => Carbon::now()
-            ]);
-        }
-
-        return $user;
-    }
 }
