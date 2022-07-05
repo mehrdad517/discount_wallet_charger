@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class DiscountWalletChargerValidation extends TestCase
 {
 
+    use RefreshDatabase, WithFaker;
+
     public function test_validation_required_data()
     {
 
@@ -82,11 +84,14 @@ class DiscountWalletChargerValidation extends TestCase
     public function test_discount_wallet_charger_that_validation_unique_mobile()
     {
 
+        $this->handleValidationExceptions();
+
         $user = User::factory()->create();
 
 
         $data = [
             'mobile' => $user->mobile,
+            'discount' => $this->faker->text()
         ];
 
 

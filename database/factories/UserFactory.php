@@ -18,7 +18,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'mobile' => $this->faker->numerify('0912' . '#######')
+            'mobile' => $this->faker->unique()->numerify('0912' . '#######')
         ];
     }
 

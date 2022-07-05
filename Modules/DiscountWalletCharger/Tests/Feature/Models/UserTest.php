@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
 {
-    use ModelHelperTesting;
+    use ModelHelperTesting, RefreshDatabase;
 
     protected function model()
     {

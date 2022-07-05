@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FinanceTest extends TestCase
 {
-    use ModelHelperTesting;
+    use ModelHelperTesting, RefreshDatabase;
 
     protected function model()
     {

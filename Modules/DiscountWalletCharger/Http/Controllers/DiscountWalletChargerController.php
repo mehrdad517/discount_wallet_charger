@@ -63,7 +63,7 @@ class DiscountWalletChargerController extends Controller
             return ResponderFacade::discountUsageError();
         });
 
-        return response()->json(['status' => true, 'entities' => $response]);
+        return response()->json(['status' => true, 'entities' => $response->users]);
     }
 
 }

@@ -15,7 +15,7 @@ use Modules\DiscountWalletCharger\Http\Controllers\DiscountWalletChargerControll
 */
 
 
-Route::prefix('admin')->middleware('auth:api')->group(function () {
+Route::prefix('admin')->group(function () {
 
     Route::prefix('discounts')->group(function () {
 

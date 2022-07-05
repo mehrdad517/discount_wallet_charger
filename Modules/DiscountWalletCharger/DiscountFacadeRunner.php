@@ -13,12 +13,18 @@ use JetBrains\PhpStorm\Pure;
 class DiscountFacadeRunner
 {
 
-
     private $discountRepository;
 
     public function __construct()
     {
         $this->discountRepository = new DiscountRepository();
+    }
+
+    public function usageList($id)
+    {
+        $list = $this->discountRepository->usageList($id);
+
+        return nullable($list);
     }
 
     /**
@@ -96,13 +102,7 @@ class DiscountFacadeRunner
                 return ['status' => false, 'message' => 'The discount capacity is full!'];
             }
 
-
-
-            DB::table('discount_usage')->insert([
-                'user_id' => $user_id,
-                'discount_id' => $discount_id
-            ]);
-
+            $this->discountRepository->attach($discount_id, $user_id);
             // After insert, the triggers are executed and charge wallet also increment total usage
 
             DB::commit();

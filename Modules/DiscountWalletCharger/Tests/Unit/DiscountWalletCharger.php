@@ -6,6 +6,7 @@ use App\Models\Discount;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Modules\DiscountWalletCharger\Facades\DiscountFacade;
+use Modules\DiscountWalletCharger\Facades\UserFacade;
 use Tests\TestCase;
 
 class DiscountWalletCharger extends TestCase
@@ -26,7 +27,7 @@ class DiscountWalletCharger extends TestCase
         DiscountFacade::shouldReceive('discountTypeHasFinanceCharger')->never();
         DiscountFacade::shouldReceive('discountIsFull')->never();
         UserFacade::shouldReceive('userFindOrCreateBy')->never();
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('alreadyUse')->never();
         DiscountFacade::shouldReceive('store')->never();
 
 
@@ -64,7 +65,7 @@ class DiscountWalletCharger extends TestCase
         DiscountFacade::shouldReceive('discountHasExpired')->never();
 
         UserFacade::shouldReceive('userFindOrCreateBy')->never();
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('alreadyUse')->never();
         DiscountFacade::shouldReceive('store')->never();
 
 
@@ -101,7 +102,7 @@ class DiscountWalletCharger extends TestCase
 
         DiscountFacade::shouldReceive('discountIsFull')->never();
         UserFacade::shouldReceive('userFindOrCreateBy')->never();
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('alreadyUse')->never();
         DiscountFacade::shouldReceive('store')->never();
 
 
@@ -144,7 +145,7 @@ class DiscountWalletCharger extends TestCase
             ->andReturn(false);
 
         UserFacade::shouldReceive('userFindOrCreateBy')->never();
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('alreadyUse')->never();
         DiscountFacade::shouldReceive('store')->never();
 
 
@@ -189,7 +190,7 @@ class DiscountWalletCharger extends TestCase
             ->once()
             ->andReturn(false);
 
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')->never();
+        DiscountFacade::shouldReceive('alreadyUse')->never();
         DiscountFacade::shouldReceive('store')->never();
 
 
@@ -210,7 +211,7 @@ class DiscountWalletCharger extends TestCase
         $user = User::factory()->make();
 
 
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')
+        DiscountFacade::shouldReceive('alreadyUse')
             ->once()
             ->with($discount->id, $user->id)
             ->andReturn(true);
@@ -285,7 +286,7 @@ class DiscountWalletCharger extends TestCase
             ->with($user->mobile)
             ->andReturn(nullable($user));
 
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')
+        DiscountFacade::shouldReceive('alreadyUse')
             ->once()
             ->with($discount->id, $user->id)
             ->andReturn(false);
@@ -336,7 +337,7 @@ class DiscountWalletCharger extends TestCase
             ->once()
             ->andReturn(false);
 
-        DiscountFacade::shouldReceive('checkBeforeDiscountUsage')
+        DiscountFacade::shouldReceive('alreadyUse')
             ->once()
             ->with($discount->id, $user->id)
             ->andReturn(false);

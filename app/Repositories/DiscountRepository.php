@@ -15,20 +15,29 @@ class DiscountRepository
         return new Discount();
     }
 
+    /**
+     * @param $discount_id
+     * @param $user_id
+     * @return mixed
+     */
+    public function attach($discount_id, $user_id)
+    {
+        return $this->find($discount_id)->users()->attach($user_id);
+    }
+
 
     public function usageList($id)
     {
-        $list = DB::table('discount_usage as d')
-            ->leftJoin('users as u', 'u.id', '=', 'd.user_id')
-            ->where('discount_id', $id)
-            ->get();
+        $list =  Discount::query()->with('users')->find($id);;
 
         return $list;
     }
 
     public function alreadyUse($id, $user_id)
     {
-        return DB::table('discount_usage')->where('discount_id', $id)->where('user_id', $user_id)->count();
+        return Discount::query()->whereHas('users', function ($q) use($user_id) {
+            $q->where('user_id', $user_id);
+        })->where('id', 1)->count();
     }
 
     /**
